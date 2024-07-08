@@ -122,6 +122,7 @@ namespace Molsketch {
       /** Slot to select all contents of the scene. */
       void selectAll();
       void setGrid(bool on = true);
+      void prokop_relax(bool on);
       void clipboardChanged();
 
 

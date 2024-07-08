@@ -7,7 +7,7 @@ set(QT_USE_QTSVG TRUE) # TODO check if really required (also in other files)
 
 # Ensure the Molsketch include directory is always first
 get_directory_property(tmp_include_dirs INCLUDE_DIRECTORIES)
-include_directories(${CMAKE_SOURCE_DIR}/libmskcore)
+include_directories(${CMAKE_SOURCE_DIR}/libmskcore  ${CMAKE_SOURCE_DIR}/libmolsketch/Prokop )
 
 file(GLOB_RECURSE libmolsketch_HDRS *.h)
 file(GLOB_RECURSE libmolsketch_SRCS *.cpp)

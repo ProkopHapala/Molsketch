@@ -74,6 +74,9 @@
 #include "graphicsitem.h"
 #endif
 
+#include "FF2D.h"
+
+
 namespace Molsketch {
 
   const QString MolScene::mouseWheelForCyclingTools = "mouse-wheel-cycle-tools";
@@ -440,6 +443,30 @@ namespace Molsketch {
     if (on) addItem(d->grid);
     else removeItem(d->grid);
   }
+
+  void MolScene::prokop_relax(bool on) {
+     double sc = 40.0;
+    QList<Molecule*> mols = molecules();
+    for( Molecule* mol : mols ){
+        FF2D ff;
+        auto atoms = mol->atoms();
+        int na = atoms.size();
+        for( auto atom : atoms ){
+            QPointF p = atom->pos();
+            //ff.addAtom( Vec2d{p.x(),p.y()}, atom->element() );
+            ff.addAtom( Vec2d{p.x()/sc,p.y()/sc}, 1 );
+        }
+        for( auto bond : mol->bonds() ){
+            ff.addBond( atoms.indexOf(bond->beginAtom()), atoms.indexOf(bond->endAtom()) );
+            // bond->bondType()
+        }
+        ff.run( 1000, 0.1, 0.1, 1e-3, true );
+        QVector<QPointF> apos( na );
+        for(int i=0; i<na; i++){ Vec2d p=ff.atoms[i].pos; apos[i]=QPointF(p.x*sc,p.y*sc); }
+        mol->setCoordinates( apos );
+    }
+  }
+
 
   XmlObjectInterface *MolScene::produceChild(const QString &childName, const QXmlStreamAttributes &attributes)
   {

@@ -55,6 +55,7 @@ struct ActionContainerPrivate {
   Q_DISABLE_COPY(ActionContainerPrivate)
   QAction *zoomInAction, *zoomOutAction, *zoomResetAction, *zoomFitAction;
   QAction *undoAction, *redoAction, *cutAction, *copyAction, *pasteAction, *selectAllAction, *alignAction;
+  QAction *prokopRelax;
   Molsketch::MolView *view;
 #ifdef QT_DEBUG
   QAction *debugAction;
@@ -120,6 +121,12 @@ struct ActionContainerPrivate {
     alignAction->setStatusTip(QObject::tr("Shows grid and snaps to it while drawing"));
     alignAction->setCheckable(true);
     QObject::connect(alignAction, &QAction::toggled, scene, &Molsketch::MolScene::setGrid);
+
+    prokopRelax = new QAction(QIcon(""), QObject::tr("Prokop Relax"), scene);
+    prokopRelax->setStatusTip(QObject::tr("Prokop Relax ... "));
+    prokopRelax->setCheckable(true);
+    QObject::connect(prokopRelax, &QAction::toggled, scene, &Molsketch::MolScene::prokop_relax);
+
   }
 
   ActionContainerPrivate(Molsketch::MolView *view) : view(view) {
@@ -162,7 +169,7 @@ QMenu *ActionContainer::createEditMenu(QWidget *parent) const {
   return createMenu(QObject::tr("&Edit"), "edit-menu", parent,
                     QList<QAction*>{d->undoAction, d->redoAction, nullptr,
                                     d->cutAction, d->copyAction, d->pasteAction, nullptr,
-                                    d->selectAllAction, d->alignAction});
+                                    d->selectAllAction, d->alignAction, d->prokopRelax} );
 }
 
 QMenu *ActionContainer::createViewMenu(QWidget *parent) const {
